@@ -1,0 +1,156 @@
+.votacao-container {
+  margin-top: 3rem;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.votacao-title {
+  text-align: center;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.votacao-subtitle {
+  text-align: center;
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+.votacao-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.votacao-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  cursor: pointer;
+}
+
+.votacao-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* 🌟 Novo Modal Moderno */
+.votacao-modal .modal-dialog {
+  max-width: 700px;
+}
+
+.modal-content-modern {
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  animation: scaleIn 0.3s ease;
+}
+
+.modal-header-modern {
+  background: linear-gradient(135deg, #007bff, #4facfe);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+}
+
+.modal-header-modern h4 {
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+  opacity: 0.7;
+}
+
+.modal-body-modern {
+  padding: 1.5rem;
+}
+
+.modal-body-modern .descricao {
+  color: #555;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.tipo-text {
+  color: #007bff;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.opcoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.opcao-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  text-align: center;
+  padding: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 2px solid transparent;
+}
+
+.opcao-card:hover {
+  transform: translateY(-3px);
+  border-color: #007bff;
+  background: #eef5ff;
+}
+
+.opcao-card.selected {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+}
+
+.modal-footer-modern {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.btn-votar {
+  background: linear-gradient(135deg, #007bff, #4facfe);
+  border: none;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.btn-votar:hover {
+  transform: scale(1.05);
+}
+
+/* animações */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 // URL da imagem de fundo
-const bgImage = "https://th.bing.com/th/id/R.04a35802c927cc8eb764f587ffba24c7?rik=pDXKC2JxL5cWXw&pid=ImgRaw&r=0";
+const bgImage = " ";
 
 const layoutStyle = {
   backgroundImage: `url("${bgImage}")`,

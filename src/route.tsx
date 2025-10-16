@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Usuario from "./pages/Usuario";
 import Cadastrese from "./pages/Cadastrese";
 import Campanha from "./pages/Campanha";
+import VotacaoPage from './pages/Votacao';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem('token');
@@ -35,6 +36,7 @@ function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/usuario" element={<Usuario />} />
         <Route path="/campanha" element={<Campanha />} />
+         <Route path="/votacao" element={<VotacaoPage />} />
       </Route>
     </Routes>
   );
