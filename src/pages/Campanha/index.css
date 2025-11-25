@@ -1,0 +1,191 @@
+:root {
+  --primary-green: #19b35a;
+  --primary-green-dark: #149148;
+  --primary-green-light: #e6f7ec;
+  --primary-red: #dc3545;
+  --primary-red-light: #fdf2f2;
+}
+
+/* CONTAINER DO SCROLL BAR - Ajuste 80px conforme altura do seu Navbar */
+.page-container-wrapper {
+  height: calc(100vh - 80px); 
+  overflow: hidden;
+  position: relative;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+.page-header h4 {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 1.75rem;
+}
+
+.btn-nova-campanha {
+  background-color: var(--primary-green) !important;
+  border-color: var(--primary-green) !important;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+.btn-nova-campanha:hover {
+  background-color: var(--primary-green-dark) !important;
+  border-color: var(--primary-green-dark) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.campanha-card {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); 
+  overflow: hidden; 
+}
+
+.campanha-table {
+  vertical-align: middle;
+}
+.campanha-table thead th {
+  background-color: #f8f9fa !important;
+  color: #555;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.campanha-table tbody tr:hover {
+  background-color: #fcfcfc;
+}
+.campanha-table tbody td {
+  padding: 1rem 0.75rem;
+  color: #333;
+}
+.campanha-table .titulo-campanha {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.campanha-table .btn-opcoes {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.25rem;
+}
+
+.badge-status {
+  padding: 0.45em 0.75em;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  letter-spacing: 0.3px;
+}
+.badge-status-ativa {
+  background-color: var(--primary-green-light) !important;
+  color: var(--primary-green-dark);
+}
+.badge-status-inativa {
+  background-color: #f1f3f5 !important;
+  color: #555;
+}
+.badge-status-votos {
+  background-color: #f3f0ff !important;
+  color: #4f32b1;
+}
+
+/* Modais */
+.modal-campanha .modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.25rem 1.5rem;
+}
+.modal-campanha .modal-header .modal-title {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.modal-campanha .modal-body {
+  padding: 1.5rem;
+}
+.modal-campanha .form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+.modal-campanha .form-control,
+.modal-campanha .form-select {
+  font-size: 0.95rem;
+  padding: 0.6rem 0.75rem;
+}
+.modal-campanha .form-check-label {
+  font-size: 0.95rem;
+}
+.modal-campanha .modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+.modal-campanha .modal-footer .btn {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+}
+.btn-salvar-campanha {
+  background-color: var(--primary-green) !important;
+  border-color: var(--primary-green) !important;
+}
+.btn-salvar-campanha:hover {
+  background-color: var(--primary-green-dark) !important;
+  border-color: var(--primary-green-dark) !important;
+}
+.btn-excluir-campanha {
+  background-color: transparent;
+  color: var(--primary-red);
+  border: none;
+}
+.btn-excluir-campanha:hover {
+  background-color: var(--primary-red-light);
+}
+
+.modal-opcoes .btn-adicionar {
+  background-color: var(--primary-green) !important;
+  border-color: var(--primary-green) !important;
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+.modal-opcoes .list-group-item {
+  font-size: 0.95rem;
+  color: #333;
+}
+.modal-opcoes .btn-excluir-opcao {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+.modal-confirm-delete .modal-body {
+  text-align: center;
+  padding: 2rem;
+}
+.modal-confirm-delete .icon-danger {
+  font-size: 3rem;
+  color: var(--primary-red);
+  margin-bottom: 1rem;
+}
+.modal-confirm-delete h5 {
+  font-weight: 600;
+  color: #333;
+}
+.modal-confirm-delete .text-muted {
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+.btn-confirm-delete {
+  background-color: var(--primary-red) !important;
+  border-color: var(--primary-red) !important;
+}

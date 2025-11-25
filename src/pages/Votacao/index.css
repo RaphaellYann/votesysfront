@@ -1,156 +1,202 @@
+:root {
+  --primary-green: #19b35a;
+  --primary-green-dark: #149148;
+  --primary-green-light: #e6f7ec;
+  --text-dark: #2c3e50;
+  --text-muted: #6c757d;
+}
+
+body {
+  background-color: #f8f9fa; /* Fundo levemente cinza para contraste */
+}
+
 .votacao-container {
-  margin-top: 3rem;
-  animation: fadeIn 0.6s ease-in-out;
+  padding-bottom: 4rem;
+}
+
+.header-section {
+    margin-top: 2rem;
 }
 
 .votacao-title {
-  text-align: center;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 0.5rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  font-size: 2rem;
+  letter-spacing: -0.5px;
 }
 
 .votacao-subtitle {
-  text-align: center;
-  color: #6c757d;
-  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
+/* --- GRID DE CARDS (Moderno) --- */
 .votacao-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
 .votacao-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: none;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 1rem;
+  background: #fff;
+  /* Sombra suave em vez de borda grossa */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.05); 
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   cursor: pointer;
+  height: 100%;
 }
 
 .votacao-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* 🌟 Novo Modal Moderno */
-.votacao-modal .modal-dialog {
-  max-width: 700px;
+.votacao-card.disabled-card {
+    opacity: 0.7;
+    background-color: #fcfcfc;
+    cursor: default;
+}
+.votacao-card.disabled-card:hover {
+    transform: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
 
-.modal-content-modern {
-  border-radius: 18px;
-  overflow: hidden;
-  background: #ffffff;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-  animation: scaleIn 0.3s ease;
+.votacao-card .card-title {
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
-.modal-header-modern {
-  background: linear-gradient(135deg, #007bff, #4facfe);
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
+.description-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 1rem;
 }
 
-.modal-header-modern h4 {
-  font-weight: 600;
-  margin: 0;
+/* --- INDICADORES DE STATUS (Dot) --- */
+.status-dot {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background-color: #f8f9fa;
 }
 
-.close-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: opacity 0.2s;
+.status-dot.active { 
+    color: var(--primary-green); 
+    background-color: var(--primary-green-light);
+}
+.status-dot.inactive { 
+    color: #999; 
 }
 
-.close-btn:hover {
-  opacity: 0.7;
-}
-
-.modal-body-modern {
-  padding: 1.5rem;
-}
-
-.modal-body-modern .descricao {
-  color: #555;
-  text-align: center;
-  margin-bottom: 1.2rem;
-  font-size: 0.95rem;
-}
-
-.tipo-text {
-  color: #007bff;
-  font-weight: 500;
-  margin-bottom: 1rem;
+/* --- MODAL DE OPÇÕES --- */
+.instruction-box {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--text-dark);
+    font-weight: 500;
+    text-align: center;
+    border: 1px dashed #ced4da;
 }
 
 .opcoes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Responsivo */
   gap: 1rem;
 }
 
 .opcao-card {
-  background: #f8f9fa;
-  border-radius: 12px;
-  text-align: center;
+  border: 1px solid #e9ecef;
+  background-color: #fff;
+  border-radius: 0.75rem;
   padding: 1rem;
-  font-weight: 500;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-dark);
   cursor: pointer;
-  transition: all 0.25s ease;
-  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .opcao-card:hover {
-  transform: translateY(-3px);
-  border-color: #007bff;
-  background: #eef5ff;
+  border-color: var(--primary-green);
+  background-color: #fafffc;
 }
 
 .opcao-card.selected {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
-  transform: scale(1.03);
-  box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+  border-color: var(--primary-green);
+  background-color: var(--primary-green-light);
+  color: var(--primary-green-dark);
+  box-shadow: 0 4px 12px rgba(25, 179, 90, 0.15);
 }
 
-.modal-footer-modern {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 1.5rem 1.5rem;
-  border-top: 1px solid #eee;
+.check-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--primary-green);
+    font-size: 1.1rem;
 }
 
+/* --- MODAL DE SUCESSO --- */
+.success-icon {
+  color: var(--primary-green);
+}
+.modal-success .modal-content {
+    border-radius: 1rem;
+    border: none;
+}
 .btn-votar {
-  background: linear-gradient(135deg, #007bff, #4facfe);
-  border: none;
+  background-color: var(--primary-green) !important;
+  border-color: var(--primary-green) !important;
   font-weight: 600;
-  padding: 0.6rem 1.5rem;
-  border-radius: 10px;
-  transition: transform 0.2s;
 }
-
 .btn-votar:hover {
-  transform: scale(1.05);
+  background-color: var(--primary-green-dark) !important;
 }
 
-/* animações */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* --- RANKING DRAG N DROP --- */
+.opcoes-grid.ranking-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+.rankeado-wrapper {
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.rankeado-card {
+    flex-grow: 1;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e0e0e0;
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+}
+.rankeado-wrapper.dragging .rankeado-card {
+    background-color: var(--primary-green-light);
+    border-color: var(--primary-green);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }

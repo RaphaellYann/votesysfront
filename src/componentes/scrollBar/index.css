@@ -1,0 +1,28 @@
+.custom-scrollbar-container {
+  height: 100000px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 5px;
+}
+
+
+.custom-scrollbar-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.custom-scrollbar-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+html, body {
+  overflow: hidden;
+}

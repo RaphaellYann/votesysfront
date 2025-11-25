@@ -1,22 +1,26 @@
-import { Outlet } from "react-router-dom"
-import Header from "../header"
-import Sidebar from "../sidebar"
+import { Outlet } from "react-router-dom";
+import Header from "../Header";
+import Footer from "../Footer";
+import ScrollBar from "../ScrollBar";
+import "./index.css";
 
-
-function LayoutAdmin(){
-    return(
-        <>
-            <Header />
-            <div className="d-flex">
-                <Sidebar />
-                <div className="flex-grow-1 p-4">
-                    <Outlet />
-                </div>
+function LayoutAdmin() {
+  return (
+    <div className="admin-layout">
+      <Header />
+      <main className="main-content">
+        <div className="content-wrapper">
+          <ScrollBar>
+            {/* Outlet renderiza a página atual */}
+            <div className="p-4">
+              <Outlet />
             </div>
-
-           
-        </>
-    )
+            <Footer />
+          </ScrollBar>
+        </div>
+      </main>
+    </div>
+  );
 }
 
-export default LayoutAdmin
+export default LayoutAdmin;

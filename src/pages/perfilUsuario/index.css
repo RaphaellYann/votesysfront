@@ -1,0 +1,136 @@
+/* Container do Banner estilo Sistema Clean */
+.system-status-card {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef; /* Borda cinza bem clara */
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03); /* Sombra muito suave */
+    color: #333; /* Texto escuro */
+}
+
+/* Avatar */
+.system-avatar {
+    width: 48px;
+    height: 48px;
+    background-color: #f1f3f5;
+    color: #0d6efd; /* Azul Bootstrap padrão */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    position: relative;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #dee2e6;
+}
+
+.dot-online {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background-color: #198754; /* Verde Sucesso */
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+
+/* Badge de Role Clean */
+.badge-clean {
+    background-color: #e7f1ff;
+    color: #0d6efd;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Divisórias Verticais no Banner */
+.border-start-custom {
+    border-left: 1px solid #e9ecef;
+}
+
+@media (max-width: 768px) {
+    .border-start-custom {
+        border-left: none;
+        border-top: 1px solid #e9ecef;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+}
+
+/* Pilulas do Histórico */
+.history-pill {
+    font-size: 0.75rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+    padding: 2px 8px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+/* Infos de Voto */
+.vote-info {
+    font-size: 0.85rem;
+    color: #495057;
+    font-weight: 500;
+}
+
+/* Relógio Clean */
+.clock-clean {
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #212529;
+}
+
+/* Inputs do Formulário mais limpos */
+.form-clean {
+    border-color: #dee2e6;
+    background-color: #fff;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+}
+.form-clean:focus {
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    border-color: #86b7fe;
+}
+
+/* Botão Salvar */
+.btn-salvar-usuario {
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+}
+
+.profile-tabs-card {
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.custom-tabs .nav-link {
+    color: #6c757d;
+    font-weight: 500;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding-bottom: 12px;
+}
+
+.custom-tabs .nav-link.active {
+    color: #0d6efd; /* Azul padrão, mude para seu verde se preferir */
+    border-bottom: 3px solid #0d6efd;
+    background-color: transparent;
+}
+
+.custom-tabs .nav-link:hover {
+    color: #0d6efd;
+    border-color: transparent;
+}
+
+.vote-item:last-child {
+    border-bottom: none !important;
+}

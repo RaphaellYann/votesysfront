@@ -1,0 +1,201 @@
+:root {
+  --primary-green: #19b35a;
+  --primary-green-dark: #149148;
+  --primary-green-light: #e6f7ec;
+  --primary-red: #dc3545;
+  --primary-red-light: #fdf2f2;
+  --gold: #ffd700;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+.page-header h4 {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Card Principal */
+.resultado-card {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+/* Estilos do Podium */
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding: 1rem;
+  padding-top: 4rem; /* Espaço extra para troféus flutuantes */
+}
+
+.podium-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+  width: 140px;
+  position: relative; /* Necessário para posicionamento absoluto do troféu */
+}
+
+.podium-item:hover {
+  transform: translateY(-5px);
+}
+
+/* --- LÓGICA DO TROFÉU FLUTUANTE --- */
+.trophy-floating {
+  position: absolute;
+  top: -55px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efeito "bouncy" suave */
+  z-index: 5;
+}
+
+/* Troféu de Ouro: Sempre visível, mas pula no hover */
+.trophy-gold {
+  opacity: 1;
+  top: -65px;
+}
+.podium-1:hover .trophy-gold {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Troféus Prata e Bronze: Invisíveis por padrão */
+.podium-2 .trophy-floating,
+.podium-3 .trophy-floating {
+  opacity: 0;
+  transform: translateY(20px) scale(0.8); /* Começa mais baixo e menor */
+}
+
+/* Troféus Prata e Bronze: Visíveis no Hover do card */
+.podium-2:hover .trophy-floating,
+.podium-3:hover .trophy-floating {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Esconde ícone estático interno no hover para limpar visual (opcional) */
+.podium-item:hover .icon-static {
+  opacity: 0.3 !important;
+  transition: opacity 0.3s;
+}
+
+/* --- RANK CIRCLE --- */
+.podium-rank {
+  font-weight: 800;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -20px;
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  font-size: 1.1rem;
+  position: relative;
+}
+
+/* --- CAIXAS COLORIDAS --- */
+.podium-box {
+  width: 100%;
+  border-radius: 0.5rem 0.5rem 0 0;
+  padding: 2.5rem 0.5rem 1rem 0.5rem; 
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* 1º Lugar */
+.podium-1 { order: 2; z-index: 10; }
+.podium-1 .podium-box { 
+  height: 250px; 
+  background: linear-gradient(135deg, #ffd700, #fdb931); 
+}
+.podium-1 .podium-rank { 
+  background-color: #e6c200; 
+  border: 3px solid #fff; 
+  width: 50px; height: 50px; font-size: 1.4rem; margin-bottom: -25px; 
+}
+
+/* 2º Lugar */
+.podium-2 { order: 1; }
+.podium-2 .podium-box { 
+  height: 200px; 
+  background: linear-gradient(135deg, #e0e0e0, #bdbdbd); 
+}
+.podium-2 .podium-rank { background-color: #a9a9a9; border: 3px solid #fff; }
+
+/* 3º Lugar */
+.podium-3 { order: 3; }
+.podium-3 .podium-box { 
+  height: 160px; 
+  background: linear-gradient(135deg, #cd7f32, #a0522d); 
+}
+.podium-3 .podium-rank { background-color: #8b4513; border: 3px solid #fff; }
+
+/* Textos e Estatísticas */
+.podium-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.podium-stats {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.votes-num {
+  background: rgba(255,255,255,0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.votes-percent {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+/* Lista Geral e Auxiliares */
+.invisible {
+    visibility: hidden;
+    width: 140px; /* Mantém espaço ocupado mesmo vazio */
+}
+.resultado-list-item {
+  border-left: 4px solid transparent;
+  transition: background-color 0.2s;
+}
+.resultado-list-item:hover {
+  background-color: #f8f9fa;
+}
+.progress-custom {
+  height: 8px;
+  border-radius: 4px;
+  background-color: #e9ecef;
+}
+.text-pontos {
+  color: var(--primary-green-dark);
+}
