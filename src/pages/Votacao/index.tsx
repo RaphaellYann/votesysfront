@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Container,
   Spinner,
@@ -9,10 +9,8 @@ import {
   Badge,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { adicionarVoto } from "../../redux/authSlice";
-
-import { CheckCircleFill, CircleFill, BarChartLine, ArrowRight } from "react-bootstrap-icons";
+import { useSelector } from "react-redux";
+import { CheckCircleFill, CircleFill, BarChartLine, ArrowRight, CheckLg, ExclamationTriangleFill } from "react-bootstrap-icons";
 import {
   DragDropContext,
   Droppable,
@@ -20,22 +18,17 @@ import {
   type DropResult,
 } from "@hello-pangea/dnd";
 
-import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
-
 import {
   buscarTodasCampanhas,
-  type Campanha,
+  type Campanha, 
 } from "../../services/campanhaService";
-
 import {
   buscarOpcoesPorCampanha,
   type OpcaoVoto,
 } from "../../services/opcaoVotoService";
-
 import { enviarVoto as enviarVotoService } from "../../services/votoService";
 import api from "../../services/api";
-
 import Trofeus from "../../componentes/trofeus";
 
 import "./index.css";
@@ -52,27 +45,32 @@ const reorder = (
 };
 
 function VotacaoPage() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const [campanhas, setCampanhas] = useState<Campanha[]>([]);
   const [opcoes, setOpcoes] = useState<OpcaoVoto[]>([]);
+  
+  // Estados de seleção
   const [selectedCampanha, setSelectedCampanha] = useState<Campanha | null>(null);
   const [selectedOpcoes, setSelectedOpcoes] = useState<number[]>([]);
+  
+  // Estados de UI/Loading
   const [isLoading, setIsLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // States do Modal de Sucesso
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  // Modais
+  const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  
+  // Feedback
+  const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
   const { usuario } = useSelector((state: RootState) => state.auth);
-  const isAdmin =
-    usuario?.role === "ROLE_ADMIN_GERAL" ||
-    usuario?.role === "ROLE_ADMIN_NORMAL";
+  
+
+  const isSuperAdmin = usuario?.role === "ROLE_ADMIN_GERAL";
 
   const runWithOverlay = (action: () => void) => {
     setIsTransitioning(true);
@@ -82,32 +80,38 @@ function VotacaoPage() {
     }, 50);
   };
 
-  useEffect(() => {
-    const fetchCampanhas = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        let data: Campanha[];
+  // --- CORREÇÃO AQUI ---
+  const fetchCampanhas = useCallback(async () => {
 
-        if (isAdmin) {
-          data = await buscarTodasCampanhas();
-        } else {
-          const response = await api.get<Campanha[]>("/campanhas/publicas");
-          data = response.data;
-        }
-        setCampanhas(data);
-      } catch (err: any) {
-        const msg = isAdmin
-          ? "Erro ao carregar campanhas (Admin)."
-          : "Erro ao carregar campanhas.";
-        setError(msg);
-      } finally {
-        setIsLoading(false);
+    if (campanhas.length === 0) setIsLoading(true);
+    
+    setError(null);
+    try {
+      let data: Campanha[];
+      
+      if (usuario?.role === "ROLE_ADMIN_GERAL") {
+        data = await buscarTodasCampanhas();
+      } else {
+
+        const response = await api.get<Campanha[]>("/campanhas/publicas");
+        data = response.data;
       }
-    };
 
+      
+      const sorted = data.sort((a, b) => (a.ativo === b.ativo ? 0 : a.ativo ? -1 : 1));
+      setCampanhas(sorted);
+
+    } catch (err: any) {
+      console.error(err);
+      setError("Não foi possível carregar a lista de campanhas.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [usuario?.role, campanhas.length]);
+
+  useEffect(() => {
     fetchCampanhas();
-  }, [isAdmin]);
+  }, [fetchCampanhas]);
 
   const abrirModalVotacao = async (campanha: Campanha) => {
     runWithOverlay(async () => {
@@ -129,6 +133,7 @@ function VotacaoPage() {
       setShowSuccessModal(false);
       setSelectedCampanha(null);
       setOpcoes([]);
+      setError(null);
     });
   };
 
@@ -156,20 +161,13 @@ function VotacaoPage() {
     if (!selectedCampanha) return;
     setIsVoting(true);
     setError(null);
+    
     try {
       let opcoesIds: number[];
-      let nomesEscolhidos: string = "";
-
-      // Lógica para pegar IDs E os Nomes das opções para o histórico
       if (selectedCampanha.tipoCampanha.toLowerCase().includes("ranqueado")) {
         opcoesIds = opcoes.map((op) => op.id);
-        // Ex: "Opção A > Opção B"
-        nomesEscolhidos = opcoes.map(op => op.nome).join(" > ");
       } else {
         opcoesIds = selectedOpcoes;
-        // Ex: "Opção A, Opção B"
-        const selecionadas = opcoes.filter(op => selectedOpcoes.includes(op.id));
-        nomesEscolhidos = selecionadas.map(op => op.nome).join(", ");
       }
 
       await enviarVotoService({
@@ -177,33 +175,31 @@ function VotacaoPage() {
         opcoesIds,
       });
 
-      // --- AQUI ESTÁ A MÁGICA ---
-      // Salva no Redux para aparecer no perfil
-      dispatch(adicionarVoto({
-        id: Date.now(),
-        pauta: selectedCampanha.titulo,
-        escolha: nomesEscolhidos || "Voto Confirmado",
-        data: new Date().toISOString()
-      }));
-      // ---------------------------
-
       setSuccessMessage("Seu voto foi computado com sucesso!");
       setShowSuccessModal(true);
       setShowModal(false);
+
+  
+      await fetchCampanhas(); 
+
     } catch (err: any) {
-      // ... seu tratamento de erro existente ...
-      const message = err.response?.data || "Erro ao registrar voto.";
-      setError(message);
+      const message = err.response?.data || "";
+      
+      if (typeof message === "string" && (message.includes("já votou") || message.includes("duplicado"))) {
+          alert("Nosso sistema identificou que seu voto já foi processado.");
+          setShowModal(false);
+          fetchCampanhas();
+          return;
+      }
+
+      setError(message || "Erro ao registrar voto. Tente novamente.");
     } finally {
       setIsVoting(false);
     }
   };
 
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination || result.destination.index === result.source.index) {
-      return;
-    }
-
+    if (!result.destination || result.destination.index === result.source.index) return;
     setOpcoes((currentOpcoes) =>
       reorder(currentOpcoes, result.source.index, result.destination.index)
     );
@@ -222,20 +218,15 @@ function VotacaoPage() {
 
       <div className="header-section text-center mb-5">
         <h2 className="votacao-title">
-          🗳️ Campanhas de Votação {isAdmin && <small className="text-muted fs-6">(Admin)</small>}
+          🗳️ Campanhas de Votação {isSuperAdmin && <small className="text-muted fs-6">(Modo Admin Geral)</small>}
         </h2>
         <p className="votacao-subtitle">
-          Participe ativamente e faça sua escolha valer. Selecione uma campanha abaixo.
+          Participe ativamente e faça sua escolha valer.
         </p>
       </div>
 
       {error && !showModal && (
-        <Alert
-          variant="danger"
-          onClose={() => setError(null)}
-          dismissible
-          className="shadow-sm"
-        >
+        <Alert variant="danger" onClose={() => setError(null)} dismissible className="shadow-sm">
           {error}
         </Alert>
       )}
@@ -243,7 +234,7 @@ function VotacaoPage() {
       {isLoading ? (
         <div className="text-center p-5">
           <Spinner animation="border" variant="success" />
-          <p className="text-muted mt-2">Carregando campanhas...</p>
+          <p className="text-muted mt-2">Sincronizando com o banco de dados...</p>
         </div>
       ) : campanhas.length === 0 ? (
         <Alert variant="info" className="text-center">
@@ -251,11 +242,17 @@ function VotacaoPage() {
         </Alert>
       ) : (
         <div className="votacao-grid">
-          {campanhas.map((camp) => (
+          {campanhas.map((camp) => {
+            const jaVotou = camp.usuarioJaVotou; 
+            
+            return (
             <Card
               key={camp.id}
-              className={`votacao-card ${!camp.ativo ? "disabled-card" : ""}`}
-              onClick={() => camp.ativo && abrirModalVotacao(camp)}
+              className={`votacao-card ${(!camp.ativo || jaVotou) ? "disabled-card" : ""} ${jaVotou ? "voted-card" : ""}`}
+              onClick={() => {
+                  if (jaVotou) return;
+                  if (camp.ativo) abrirModalVotacao(camp);
+              }}
             >
               <Card.Body className="d-flex flex-column">
 
@@ -264,9 +261,16 @@ function VotacaoPage() {
                     <CircleFill size={10} />
                     <span>{camp.ativo ? "Em andamento" : "Encerrada"}</span>
                   </div>
-                  <Badge bg="light" text="dark" className="type-badge border">
-                    {camp.tipoCampanha.replace(/_/g, " ")}
-                  </Badge>
+                  <div className="d-flex gap-2">
+                    {jaVotou && (
+                       <Badge bg="success" className="border d-flex align-items-center">
+                          <CheckLg className="me-1"/> Votado
+                       </Badge>
+                    )}
+                    <Badge bg="light" text="dark" className="type-badge border">
+                      {camp.tipoCampanha.replace(/_/g, " ")}
+                    </Badge>
+                  </div>
                 </div>
 
                 <Card.Title className="mb-2">{camp.titulo}</Card.Title>
@@ -275,23 +279,35 @@ function VotacaoPage() {
                   {camp.descricao}
                 </Card.Text>
 
-                {/* BOTÃO VOTAR - REMOVIDO ROUNDED-PILL */}
                 <div className="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
                   <span className="text-muted small">
-                    {camp.ativo ? "Disponível para voto" : "Votação encerrada"}
+                    {jaVotou 
+                        ? "Obrigado pelo seu voto!" 
+                        : camp.ativo 
+                            ? "Disponível para voto" 
+                            : "Votação encerrada"}
                   </span>
+                  
                   <Button
-                    variant={camp.ativo ? "outline-success" : "secondary"}
+                    variant={jaVotou ? "secondary" : camp.ativo ? "outline-success" : "secondary"}
                     size="sm"
-                    className="px-3" /* Removido rounded-pill */
-                    disabled={!camp.ativo}
+                    className="px-3"
+                    disabled={!camp.ativo || jaVotou}
+                    style={{ 
+                        opacity: jaVotou ? 0.8 : 1,
+                        cursor: jaVotou ? "not-allowed" : "pointer"
+                    }}
                   >
-                    {camp.ativo ? "Votar Agora" : "Fechada"} <ArrowRight className="ms-1" />
+                    {jaVotou 
+                        ? <> <CheckLg className="me-1"/> Votado </> 
+                        : camp.ativo 
+                            ? <> Votar Agora <ArrowRight className="ms-1" /> </>
+                            : "Fechada"}
                   </Button>
                 </div>
               </Card.Body>
             </Card>
-          ))}
+          )})}
         </div>
       )}
 
@@ -313,6 +329,12 @@ function VotacaoPage() {
           </div>
         </Modal.Header>
         <Modal.Body>
+          {error && (
+            <Alert variant="danger" className="mb-3">
+               <ExclamationTriangleFill className="me-2"/> {error}
+            </Alert>
+          )}
+
           <div className="instruction-box mb-4">
             {selectedCampanha &&
               (selectedCampanha.tipoCampanha.toLowerCase().includes("unico")
@@ -346,7 +368,6 @@ function VotacaoPage() {
                             {...provided.dragHandleProps}
                           >
                             <Trofeus posicao={index + 1} />
-
                             <div className="rankeado-card shadow-sm">
                               <span className="opcao-nome">{op.nome}</span>
                             </div>
@@ -381,9 +402,8 @@ function VotacaoPage() {
             Cancelar
           </Button>
 
-          {/* BOTÃO CONFIRMAR - REMOVIDO ROUNDED-PILL */}
           <Button
-            className="btn-votar px-4" /* Removido rounded-pill */
+            className="btn-votar px-4"
             onClick={enviarVoto}
             disabled={
               isVoting ||
@@ -403,7 +423,7 @@ function VotacaoPage() {
         </Modal.Footer>
       </Modal>
 
-      {/* --- MODAL DE SUCESSO E REDIRECIONAMENTO --- */}
+      {/* --- MODAL DE SUCESSO --- */}
       <Modal
         show={showSuccessModal}
         onHide={fecharModal}
@@ -415,15 +435,14 @@ function VotacaoPage() {
           <div className="success-icon mb-3">
             <CheckCircleFill size={60} />
           </div>
-          <h4 className="mb-2 fw-bold text-dark">Voto Registrado!</h4>
+          <h4 className="mb-2 fw-bold text-dark">Sucesso!</h4>
           <p className="text-muted mb-4">{successMessage}</p>
 
           <div className="d-grid gap-2">
-            {/* BOTÃO RESULTADOS - REMOVIDO ROUNDED-PILL */}
             <Button
               variant="outline-success"
               onClick={irParaResultados}
-              className="d-flex align-items-center justify-content-center py-2 fw-bold" /* Removido rounded-pill */
+              className="d-flex align-items-center justify-content-center py-2 fw-bold"
             >
               <BarChartLine className="me-2" />
               Ver Resultados Parciais
@@ -434,7 +453,7 @@ function VotacaoPage() {
               onClick={fecharModal}
               className="text-muted text-decoration-none mt-1"
             >
-              Continuar na tela de votação
+              Voltar para campanhas
             </Button>
           </div>
         </Modal.Body>

@@ -41,3 +41,9 @@ export async function atualizarCampanha(id: number, request: CampanhaRequest): P
 export async function excluirCampanha(id: number): Promise<void> {
   await api.delete(`/campanhas/${id}`);
 }
+
+
+export async function buscarCampanhasParaResultados(): Promise<Campanha[]> {
+  const response = await api.get<Campanha[]>("/campanhas/resultados");
+  return response.data;
+}
